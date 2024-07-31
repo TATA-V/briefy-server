@@ -22,8 +22,11 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     'max-len': 'off',
-    'prettier/prettier': {
-      'printWidth': 'auto',
-    }
+    'prettier/prettier': [
+      'error',
+      {
+        printWidth: 150,
+      }
+    ]
   },
 };
