@@ -11,5 +11,6 @@ import { UserModule } from '../user/user.module';
   imports: [JwtModule.register({}), UserModule],
   controllers: [GoogleController, AuthController],
   providers: [SocialService, GoogleStrategy, AuthService],
+  exports: [AuthService],
 })
 export class AuthModule {}

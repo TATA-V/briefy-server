@@ -1,8 +1,8 @@
-import { ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { UserModel } from './entity/user.entity';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { UserModel } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
-import { InsertOne, UpdateOne } from './dto/user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { InsertOne, UpdateOne } from 'src/dto/user.dto';
 
 @Injectable()
 export class UserService {
@@ -12,15 +12,9 @@ export class UserService {
   ) {}
 
   async insertOne(user: InsertOne) {
-    try {
-      return await this.repo.save(user);
-    } catch (e) {
-      if (e.code === '23505') {
-        throw new ConflictException('중복된 사용자가 이미 존재합니다.');
-      } else {
-        throw new InternalServerErrorException();
-      }
-    }
+    const existUser = await this.repo.findOne({ where: { email: user.email } });
+    if (existUser) return existUser;
+    return await this.repo.save(user);
   }
 
   async getOne(id: number) {

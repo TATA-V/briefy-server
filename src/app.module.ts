@@ -8,7 +8,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { CommonModule } from './modules/common/common.module';
 import { ArticleModule } from './modules/article/article.module';
-import { BearerTokenGuard } from './modules/auth/guard/bearer-token.guard';
+import { AccessTokenGuard } from './guard/bearer-token.guard';
+import { RolesGuard } from './guard/roles.guard';
 
 @Module({
   imports: [
@@ -36,7 +37,11 @@ import { BearerTokenGuard } from './modules/auth/guard/bearer-token.guard';
     },
     {
       provide: APP_GUARD,
-      useClass: BearerTokenGuard,
+      useClass: AccessTokenGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })

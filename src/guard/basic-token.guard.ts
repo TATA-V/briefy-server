@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { AuthService } from '../auth.service';
+import { AuthService } from 'src/modules/auth/auth.service';
 
 @Injectable()
-export class BearerTokenGuard implements CanActivate {
+export class BasicTokenGuard implements CanActivate {
   constructor(private readonly authService: AuthService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -13,13 +13,11 @@ export class BearerTokenGuard implements CanActivate {
       throw new UnauthorizedException('토큰이 없습니다.');
     }
 
-    const token = this.authService.extrackTokenFromHeader(rawToken, true);
-    const tokenPayload = this.authService.verifyToken(token);
-    const user = await this.authService.authenticateWithEmail(tokenPayload.email);
+    const token = this.authService.extrackTokenFromHeader(rawToken, false);
+    const { email } = this.authService.verifyToken(token);
+    const user = await this.authService.authenticateWithEmail(email);
 
     req.user = user;
-    req.token = token;
-    req.tokenType = tokenPayload.type;
 
     return true;
   }

@@ -1,5 +1,5 @@
-import { BaseModel } from 'src/modules/common/entity/base.entity';
-import { InterestRole } from 'src/modules/user/role/user.role';
+import { BaseModel } from 'src/entity/base.entity';
+import { Interest } from 'src/types/user.type';
 import { IsArray, IsEmail, IsEnum, IsString } from 'class-validator';
 import { Column, Entity } from 'typeorm';
 
@@ -15,6 +15,6 @@ export class UserModel extends BaseModel {
 
   @Column('simple-array', { default: '' })
   @IsArray()
-  @IsEnum(InterestRole, { each: true })
-  interest: InterestRole[] = [];
+  @IsEnum(Interest, { each: true })
+  interest: Interest[] = [];
 }

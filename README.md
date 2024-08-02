@@ -1,3 +1,3 @@
 ## Briefy Server
 
-`NestJS` `TypeORM` `PostgreSQL` `Supabase` `Vercel` `JWT`
+`NestJS` `Typescript` `TypeORM` `PostgreSQL` `Supabase` `Vercel` `JWT`
