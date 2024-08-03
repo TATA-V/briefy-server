@@ -17,11 +17,16 @@ export class AuthController {
     const newAccessToken = this.authService.rotateToken(token, false);
     const newRefreshToken = this.authService.rotateToken(token, true);
 
-    res.header('authorization', `Bearer ${newAccessToken}`);
+    const isProd = process.env.NODE_ENV === 'production';
+    res.cookie('access_token', `Bearer ${newAccessToken}`, {
+      httpOnly: false,
+      secure: isProd,
+      sameSite: 'lax',
+    });
     res.cookie('refresh_token', `Bearer ${newRefreshToken}`, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      secure: isProd,
+      sameSite: 'lax',
     });
 
     return true;

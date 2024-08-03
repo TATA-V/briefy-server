@@ -17,20 +17,22 @@ export class GoogleController {
   @IsPublic()
   @Get('redirect')
   @UseGuards(AuthGuard('google'))
-  async googleAuthRedirect(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
     const user = await this.socialService.socialLogin(req);
 
-    if ('email' in user) {
-      const { accessToken, refreshToken } = this.authService.loginUser({ id: user.id, email: user.email });
+    const { accessToken, refreshToken } = this.authService.loginUser({ id: user.id, email: user.email });
 
-      res.header('authorization', `Bearer ${accessToken}`);
-
-      res.cookie('refresh_token', `Bearer ${refreshToken}`, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'none',
-      });
-    }
+    const isProd = process.env.NODE_ENV === 'production';
+    res.cookie('access_token', `Bearer ${accessToken}`, {
+      httpOnly: false,
+      secure: isProd,
+      sameSite: 'lax',
+    });
+    res.cookie('refresh_token', `Bearer ${refreshToken}`, {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: 'lax',
+    });
 
     res.redirect(`${this.configService.get('CLIENT_BASE_URL')}`);
   }
