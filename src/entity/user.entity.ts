@@ -1,5 +1,5 @@
 import { BaseModel } from 'src/entity/base.entity';
-import { Interest } from 'src/types/user.type';
+import { Interest, RolesEnum } from 'src/types/user.type';
 import { IsArray, IsEmail, IsEnum, IsString } from 'class-validator';
 import { Column, Entity } from 'typeorm';
 
@@ -17,4 +17,10 @@ export class UserModel extends BaseModel {
   @IsArray()
   @IsEnum(Interest, { each: true })
   interest: Interest[] = [];
+
+  @Column({
+    enum: Object.keys(RolesEnum),
+    default: RolesEnum.USER,
+  })
+  role: RolesEnum;
 }

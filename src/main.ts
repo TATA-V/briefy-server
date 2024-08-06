@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import { AppDataSource } from 'ormconfig';
+import { createInitialAdmin } from './scripts/initialize';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +20,9 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(cookieParser());
+  await AppDataSource.initialize();
+  await createInitialAdmin();
+
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

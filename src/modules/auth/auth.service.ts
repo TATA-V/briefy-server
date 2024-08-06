@@ -35,10 +35,14 @@ export class AuthService {
   }
 
   rotateToken(token: string, isRefreshToken: boolean) {
-    const decoded = this.jwtService.verify(token, {
-      secret: this.configService.get('JWT_SECRET'),
-    });
-    return this.signToken(decoded, isRefreshToken);
+    try {
+      const decoded = this.jwtService.verify(token, {
+        secret: this.configService.get('JWT_SECRET'),
+      });
+      return this.signToken(decoded, isRefreshToken);
+    } catch (e) {
+      throw new UnauthorizedException('토큰이 만료됐거나 잘못된 토큰입니다.');
+    }
   }
 
   async authenticateWithEmail(email: string) {
@@ -57,7 +61,7 @@ export class AuthService {
     };
     return this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_SECRET'),
-      expiresIn: isRefreshToken ? 240 : 120, // 4분, 2분 .. test용임
+      expiresIn: isRefreshToken ? 240 : 60, // 4분, 1분 .. test용임
     });
   }
 
