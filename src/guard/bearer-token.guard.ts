@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC } from 'src/decorator/roles.decorator';
+import { IS_PUBLIC_KEY } from 'src/decorator/roles.decorator';
 
 @Injectable()
 export class BearerTokenGuard implements CanActivate {
@@ -13,7 +13,7 @@ export class BearerTokenGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
 
-    const isPublic = this.reflector.getAllAndOverride(IS_PUBLIC, [context.getHandler(), context.getClass()]);
+    const isPublic = this.reflector.getAllAndOverride(IS_PUBLIC_KEY, [context.getHandler(), context.getClass()]);
     if (isPublic) {
       req.isRoutePublic = true;
       return true;

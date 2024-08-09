@@ -1,14 +1,16 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { IsAdminGuard, IsMineOrAdminGuard } from 'src/guard/is-mine-or-admin.guard';
+import { IsMineOrAdminGuard } from 'src/guard/is-mine-or-admin.guard';
 import { UpdateOne, ChangeRole } from 'src/dto/user.dto';
+import { Roles } from 'src/decorator/roles.decorator';
+import { RolesEnum } from 'src/types/user.type';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @UseGuards(IsAdminGuard)
+  @Roles(RolesEnum.ADMIN)
   getAll() {
     return this.userService.getAll();
   }
@@ -32,7 +34,7 @@ export class UserController {
   }
 
   @Patch('change-role/:id')
-  @UseGuards(IsAdminGuard)
+  @Roles(RolesEnum.ADMIN)
   changeRole(@Param('id', ParseIntPipe) id: number, @Body() body: ChangeRole) {
     return this.changeRole(id, body);
   }

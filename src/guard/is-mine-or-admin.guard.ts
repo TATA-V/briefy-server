@@ -1,22 +1,7 @@
-import { BadRequestException, CanActivate, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { RolesEnum } from 'src/types/user.type';
 
 @Injectable()
-export class IsAdminGuard implements CanActivate {
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const req = context.switchToHttp().getRequest();
-
-    const { user } = req;
-    if (!user) {
-      throw new UnauthorizedException('사용자 정보를 가져올 수 없습니다.');
-    }
-    if (user.role !== RolesEnum.ADMIN) {
-      throw new ForbiddenException('관리자 권한이 없습니다.');
-    }
-    return true;
-  }
-}
-
 export class IsMineOrAdminGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
