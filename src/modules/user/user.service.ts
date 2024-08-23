@@ -1,14 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { UserModel } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChangeRole, InsertOne, UpdateOne } from 'src/dto/user.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserModel)
     private readonly repo: Repository<UserModel>,
+    private readonly configService: ConfigService,
   ) {}
 
   async insertOne(user: InsertOne) {
@@ -19,7 +21,7 @@ export class UserService {
 
   async getAll() {
     const userList = await this.repo.find();
-    if (userList) {
+    if (!userList.length) {
       throw new NotFoundException();
     }
     return userList;
@@ -33,10 +35,14 @@ export class UserService {
     return user;
   }
 
-  async deleteOne(id: number) {
+  async deleteOne(id: number, loginUserEmail: string) {
     const user = await this.repo.findOne({ where: { id } });
     if (!user) {
       throw new NotFoundException();
+    }
+    const defaultAdmin = this.configService.get('ADMIN_EMAIL');
+    if (user.email === defaultAdmin && loginUserEmail !== defaultAdmin) {
+      throw new ForbiddenException('이 작업을 수행할 권한이 없습니다.');
     }
     await this.repo.delete(id);
     return id;

@@ -1,9 +1,8 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Request } from '@nestjs/common';
 import { UserService } from './user.service';
-import { IsMineOrAdminGuard } from 'src/guard/is-mine-or-admin.guard';
 import { UpdateOne, ChangeRole } from 'src/dto/user.dto';
 import { Roles } from 'src/decorator/roles.decorator';
-import { RolesEnum } from 'src/types/user.type';
+import { RolesEnum } from 'src/types/user';
 
 @Controller('user')
 export class UserController {
@@ -15,22 +14,37 @@ export class UserController {
     return this.userService.getAll();
   }
 
+  @Get('profile')
+  getProfile(@Request() req) {
+    return this.getOne(req.uer.id);
+  }
+
+  @Patch('profile')
+  updateProfile(@Body() body: UpdateOne, @Request() req) {
+    return this.updateOne(req.user.id, body);
+  }
+
+  @Delete('profile')
+  deleteProfile(@Request() req) {
+    return this.deleteOne(req.user.id, req.user.email);
+  }
+
   @Get(':id')
-  @UseGuards(IsMineOrAdminGuard)
+  @Roles(RolesEnum.ADMIN)
   getOne(@Param('id', ParseIntPipe) id: number) {
     return this.getOne(id);
   }
 
   @Patch(':id')
-  @UseGuards(IsMineOrAdminGuard)
+  @Roles(RolesEnum.ADMIN)
   updateOne(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateOne) {
     return this.updateOne(id, body);
   }
 
   @Delete(':id')
-  @UseGuards(IsMineOrAdminGuard)
-  deleteOne(@Param('id', ParseIntPipe) id: number) {
-    return this.deleteOne(id);
+  @Roles(RolesEnum.ADMIN)
+  deleteOne(@Param('id', ParseIntPipe) id: number, @Request() req) {
+    return this.deleteOne(id, req.user.email);
   }
 
   @Patch('change-role/:id')

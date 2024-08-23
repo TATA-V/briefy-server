@@ -61,7 +61,7 @@ export class AuthService {
     };
     return this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_SECRET'),
-      expiresIn: isRefreshToken ? 240 : 60, // 4분, 1분 .. test용임
+      expiresIn: isRefreshToken ? 24 * 60 * 60 : 60 * 60,
     });
   }
 

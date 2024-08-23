@@ -1,4 +1,4 @@
-export enum Interest {
+export enum Category {
   BUSINESS = 'business',
   TECH = 'tech',
   HEALTH = 'health',
@@ -9,9 +9,4 @@ export enum Interest {
   TRAVEL = 'travel',
   MEDIA = 'media',
   FOOD = 'food',
-}
-
-export enum RolesEnum {
-  ADMIN = 'admin', // 관리자
-  USER = 'user', // 사용자
 }

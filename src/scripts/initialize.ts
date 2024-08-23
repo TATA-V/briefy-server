@@ -1,6 +1,6 @@
 import { AppDataSource } from 'ormconfig';
 import { UserModel } from 'src/entity/user.entity';
-import { RolesEnum } from 'src/types/user.type';
+import { RolesEnum } from 'src/types/user';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
