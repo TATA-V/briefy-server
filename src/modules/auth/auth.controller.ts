@@ -19,12 +19,9 @@ export class AuthController {
     const newAccessToken = this.authService.rotateToken(token, false);
     const newRefreshToken = this.authService.rotateToken(token, true);
 
+    res.setHeader('authorization', `Bearer ${newAccessToken}`);
+
     const isProd = process.env.NODE_ENV === 'production';
-    res.cookie('access_token', `Bearer ${newAccessToken}`, {
-      httpOnly: false,
-      secure: isProd,
-      sameSite: 'lax',
-    });
     res.cookie('refresh_token', `Bearer ${newRefreshToken}`, {
       httpOnly: true,
       secure: isProd,

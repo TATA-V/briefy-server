@@ -49,7 +49,7 @@ export class NewsletterController {
   }
 
   @Delete(':id/favorite')
-  removeFavorite(@Param('id') id: number, @Request() req) {
-    return this.newsletterService.removeFavorite(id, req.user.id);
+  deleteFavorite(@Param('id') id: number, @Request() req) {
+    return this.newsletterService.deleteFavorite(id, req.user.id);
   }
 }

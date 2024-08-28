@@ -77,7 +77,7 @@ export class NewsletterService {
     return id;
   }
 
-  async removeFavorite(id: number, userId: number) {
+  async deleteFavorite(id: number, userId: number) {
     const newsletter = await this.repo.findOne({ where: { id }, relations: ['authors'] });
     const user = await this.userRepo.findOne({ where: { id: userId }, relations: ['newsletters'] });
 

@@ -23,17 +23,12 @@ export class GoogleController {
     const { accessToken, refreshToken } = this.authService.loginUser({ id: user.id, email: user.email });
 
     const isProd = process.env.NODE_ENV === 'production';
-    res.cookie('access_token', `Bearer ${accessToken}`, {
-      httpOnly: false,
-      secure: isProd,
-      sameSite: 'lax',
-    });
     res.cookie('refresh_token', `Bearer ${refreshToken}`, {
       httpOnly: true,
       secure: isProd,
       sameSite: 'lax',
     });
 
-    res.redirect(`${this.configService.get('CLIENT_BASE_URL')}`);
+    res.redirect(`${this.configService.get('CLIENT_BASE_URL')}?accessToken=${accessToken}`);
   }
 }

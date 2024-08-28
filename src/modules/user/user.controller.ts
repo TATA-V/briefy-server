@@ -47,7 +47,7 @@ export class UserController {
     return this.deleteOne(id, req.user.email);
   }
 
-  @Patch('change-role/:id')
+  @Patch(':id/change-role')
   @Roles(RolesEnum.ADMIN)
   changeRole(@Param('id', ParseIntPipe) id: number, @Body() body: ChangeRole) {
     return this.changeRole(id, body);
