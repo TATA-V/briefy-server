@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChangeRole, InsertOne, UpdateOne } from 'src/dto/user.dto';
 import { ConfigService } from '@nestjs/config';
+import { BasePaginate } from 'src/dto/base-paginate.dto';
+import { CommonService } from 'src/modules/common/common.service';
 
 @Injectable()
 export class UserService {
@@ -11,6 +13,7 @@ export class UserService {
     @InjectRepository(UserModel)
     private readonly repo: Repository<UserModel>,
     private readonly configService: ConfigService,
+    private readonly commonService: CommonService,
   ) {}
 
   async insertOne(user: InsertOne) {
@@ -19,12 +22,8 @@ export class UserService {
     return await this.repo.save(user);
   }
 
-  async getAll() {
-    const userList = await this.repo.find();
-    if (!userList.length) {
-      throw new NotFoundException();
-    }
-    return userList;
+  async getAll(dto: BasePaginate) {
+    return this.commonService.paginate({ dto, repo: this.repo, path: 'user' });
   }
 
   async getOne(id: number) {

@@ -1,9 +1,12 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InsertOne, UpdateOne } from 'src/dto/newsletter.dto';
+import { BasePaginate } from 'src/dto/base-paginate.dto';
 import { NewsletterModel } from 'src/entity/newsletter.entity';
 import { UserModel } from 'src/entity/user.entity';
+import { Category } from 'src/types/category';
 import { Repository } from 'typeorm';
+import { CommonService } from 'src/modules/common/common.service';
 
 @Injectable()
 export class NewsletterService {
@@ -12,14 +15,16 @@ export class NewsletterService {
     private readonly repo: Repository<NewsletterModel>,
     @InjectRepository(UserModel)
     private readonly userRepo: Repository<UserModel>,
+    private readonly commonService: CommonService,
   ) {}
 
-  async getAll() {
-    const newsletterList = await this.repo.find();
-    if (!newsletterList.length) {
-      throw new NotFoundException();
-    }
-    return newsletterList;
+  async getAll(dto: BasePaginate) {
+    return this.commonService.paginate({ dto, repo: this.repo, path: 'newsletter' });
+  }
+
+  async getByCategory(category: Category, dto: BasePaginate) {
+    const overrideFindOptions = { where: { category } };
+    return this.commonService.paginate({ dto, repo: this.repo, path: 'newsletter', overrideFindOptions });
   }
 
   async getOne(id: number) {

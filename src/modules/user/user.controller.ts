@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Query, Request } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateOne, ChangeRole } from 'src/dto/user.dto';
 import { Roles } from 'src/decorator/roles.decorator';
 import { RolesEnum } from 'src/types/user';
+import { BasePaginate } from 'src/dto/base-paginate.dto';
 
 @Controller('user')
 export class UserController {
@@ -10,8 +11,8 @@ export class UserController {
 
   @Get()
   @Roles(RolesEnum.ADMIN)
-  getAll() {
-    return this.userService.getAll();
+  getAll(@Query() query?: BasePaginate) {
+    return this.userService.getAll(query);
   }
 
   @Get('profile')
