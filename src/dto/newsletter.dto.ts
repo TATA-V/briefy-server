@@ -11,5 +11,5 @@ export class UpdateOne extends PartialType(OmitType(NewsletterModel, ['id', 'upd
 export class PaginateNewsletter extends BasePaginate {
   @IsEnum(Category)
   @IsOptional()
-  where__category?: string;
+  where__category?: Category;
 }
