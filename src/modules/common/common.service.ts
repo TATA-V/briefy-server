@@ -1,12 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { BasePaginate } from 'src/dto/base-paginate.dto';
+import { PaginateNewsletter } from 'src/dto/newsletter.dto';
 import { BaseModel } from 'src/entity/base.entity';
 import { FILTER_MAPPER } from 'src/utils/filter-mapper';
 import { FindManyOptions, FindOptionsOrder, FindOptionsWhere, Repository } from 'typeorm';
 
 interface Paginate<T extends BaseModel> {
-  dto: BasePaginate;
+  dto: BasePaginate | PaginateNewsletter;
   repo: Repository<T>;
   overrideFindOptions?: FindManyOptions<T>;
   path: string;

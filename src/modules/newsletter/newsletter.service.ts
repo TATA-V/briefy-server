@@ -1,10 +1,8 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { InsertOne, UpdateOne } from 'src/dto/newsletter.dto';
-import { BasePaginate } from 'src/dto/base-paginate.dto';
+import { InsertOne, PaginateNewsletter, UpdateOne } from 'src/dto/newsletter.dto';
 import { NewsletterModel } from 'src/entity/newsletter.entity';
 import { UserModel } from 'src/entity/user.entity';
-import { Category } from 'src/types/category';
 import { Repository } from 'typeorm';
 import { CommonService } from 'src/modules/common/common.service';
 
@@ -18,13 +16,8 @@ export class NewsletterService {
     private readonly commonService: CommonService,
   ) {}
 
-  async getAll(dto: BasePaginate) {
+  async getAll(dto: PaginateNewsletter) {
     return this.commonService.paginate({ dto, repo: this.repo, path: 'newsletter' });
-  }
-
-  async getByCategory(category: Category, dto: BasePaginate) {
-    const overrideFindOptions = { where: { category } };
-    return this.commonService.paginate({ dto, repo: this.repo, path: 'newsletter', overrideFindOptions });
   }
 
   async getOne(id: number) {

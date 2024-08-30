@@ -29,6 +29,6 @@ export class GoogleController {
       sameSite: 'lax',
     });
 
-    res.redirect(`${this.configService.get('CLIENT_BASE_URL')}?accessToken=${accessToken}`);
+    res.redirect(`${this.configService.get('CLIENT_BASE_URL')}?accessToken=Bearer ${accessToken}`);
   }
 }

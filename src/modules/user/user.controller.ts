@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Query, Request } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UpdateOne, ChangeRole } from 'src/dto/user.dto';
+import { UpdateOne } from 'src/dto/user.dto';
 import { Roles } from 'src/decorator/roles.decorator';
 import { RolesEnum } from 'src/types/user';
 import { BasePaginate } from 'src/dto/base-paginate.dto';
@@ -17,40 +17,40 @@ export class UserController {
 
   @Get('profile')
   getProfile(@Request() req) {
-    return this.getOne(req.uer.id);
+    return this.userService.getOne(req.user.id);
   }
 
   @Patch('profile')
   updateProfile(@Body() body: UpdateOne, @Request() req) {
-    return this.updateOne(req.user.id, body);
+    return this.userService.updateOne(req.user.id, body);
   }
 
   @Delete('profile')
   deleteProfile(@Request() req) {
-    return this.deleteOne(req.user.id, req.user.email);
+    return this.userService.deleteOne(req.user.id, req.user.email);
   }
 
   @Get(':id')
   @Roles(RolesEnum.ADMIN)
   getOne(@Param('id', ParseIntPipe) id: number) {
-    return this.getOne(id);
+    return this.userService.getOne(id);
   }
 
   @Patch(':id')
   @Roles(RolesEnum.ADMIN)
   updateOne(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateOne) {
-    return this.updateOne(id, body);
+    return this.userService.updateOne(id, body);
   }
 
   @Delete(':id')
   @Roles(RolesEnum.ADMIN)
   deleteOne(@Param('id', ParseIntPipe) id: number, @Request() req) {
-    return this.deleteOne(id, req.user.email);
+    return this.userService.deleteOne(id, req.user.email);
   }
 
   @Patch(':id/change-role')
   @Roles(RolesEnum.ADMIN)
-  changeRole(@Param('id', ParseIntPipe) id: number, @Body() body: ChangeRole) {
-    return this.changeRole(id, body);
+  changeRole(@Param('id', ParseIntPipe) id: number, @Query('role') role: string) {
+    return this.userService.changeRole(id, role);
   }
 }

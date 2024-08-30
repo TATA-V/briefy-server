@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/commo
 import { UserModel } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ChangeRole, InsertOne, UpdateOne } from 'src/dto/user.dto';
+import { InsertOne, UpdateOne } from 'src/dto/user.dto';
 import { ConfigService } from '@nestjs/config';
 import { BasePaginate } from 'src/dto/base-paginate.dto';
 import { CommonService } from 'src/modules/common/common.service';
@@ -62,12 +62,12 @@ export class UserService {
     return updateUser;
   }
 
-  async changeRole(id: number, body: ChangeRole) {
+  async changeRole(id: number, role: string) {
     const user = await this.repo.findOne({ where: { id } });
     if (!user) {
       throw new NotFoundException();
     }
-    Object.assign(user, body);
+    Object.assign(user, { role });
     const updateUser = await this.repo.save(user);
     return updateUser;
   }

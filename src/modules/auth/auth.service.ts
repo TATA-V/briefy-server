@@ -59,10 +59,9 @@ export class AuthService {
       email: user.email,
       type: isRefreshToken ? 'refresh' : 'access',
     };
-    // expiresIn: isRefreshToken ? 24 * 60 * 60 : 60 * 60,
     return this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_SECRET'),
-      expiresIn: isRefreshToken ? 60 * 4 : 60, // 4분, 1분 .. test용임
+      expiresIn: isRefreshToken ? 24 * 60 * 60 : 60 * 60,
     });
   }
 

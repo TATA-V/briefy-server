@@ -1,10 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Request } from '@nestjs/common';
 import { NewsletterService } from './newsletter.service';
 import { IsPublic, Roles } from 'src/decorator/roles.decorator';
-import { InsertOne, UpdateOne } from 'src/dto/newsletter.dto';
+import { InsertOne, PaginateNewsletter, UpdateOne } from 'src/dto/newsletter.dto';
 import { RolesEnum } from 'src/types/user';
-import { Category } from 'src/types/category';
-import { BasePaginate } from 'src/dto/base-paginate.dto';
 
 @Controller('newsletter')
 export class NewsletterController {
@@ -12,14 +10,8 @@ export class NewsletterController {
 
   @Get()
   @IsPublic()
-  getAll(@Query() query?: BasePaginate) {
+  getAll(@Query() query?: PaginateNewsletter) {
     return this.newsletterService.getAll(query);
-  }
-
-  @Get()
-  @IsPublic()
-  getByCategory(@Query('category') category?: Category, @Query() query?: BasePaginate) {
-    return this.newsletterService.getByCategory(category, query);
   }
 
   @Get(':id')
