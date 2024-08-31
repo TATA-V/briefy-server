@@ -10,11 +10,11 @@
       "matchDepTypes": ["devDependencies"],
       "matchPackagePatterns": ["^eslint", "^prettier"],
       "labels": ["lint"],
-      "automerge": true
+      "automerge": false
     },
     {
       "matchUpdateTypes": ["major", "minor", "patch"],
-      "automerge": true
+      "automerge": false
     }
   ]
 }

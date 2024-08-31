@@ -6,6 +6,7 @@ import { InsertOne, UpdateOne } from 'src/dto/user.dto';
 import { ConfigService } from '@nestjs/config';
 import { BasePaginate } from 'src/dto/base-paginate.dto';
 import { CommonService } from 'src/modules/common/common.service';
+import { RolesEnum } from 'src/types/user';
 
 @Injectable()
 export class UserService {
@@ -62,10 +63,14 @@ export class UserService {
     return updateUser;
   }
 
-  async changeRole(id: number, role: string) {
+  async changeRole(id: number, role: RolesEnum, loginUserEmail: string) {
     const user = await this.repo.findOne({ where: { id } });
     if (!user) {
       throw new NotFoundException();
+    }
+    const defaultAdmin = this.configService.get('ADMIN_EMAIL');
+    if (user.email === defaultAdmin && loginUserEmail !== defaultAdmin) {
+      throw new ForbiddenException('이 작업을 수행할 권한이 없습니다.');
     }
     Object.assign(user, { role });
     const updateUser = await this.repo.save(user);

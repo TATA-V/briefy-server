@@ -50,7 +50,7 @@ export class UserController {
 
   @Patch(':id/change-role')
   @Roles(RolesEnum.ADMIN)
-  changeRole(@Param('id', ParseIntPipe) id: number, @Query('role') role: string) {
-    return this.userService.changeRole(id, role);
+  changeRole(@Param('id', ParseIntPipe) id: number, @Body() body: { role: RolesEnum }, @Request() req) {
+    return this.userService.changeRole(id, body.role, req.user.email);
   }
 }
