@@ -18,6 +18,7 @@ async function bootstrap() {
   app.enableCors({
     origin: process.env.CLIENT_BASE_URL,
     credentials: true,
+    exposedHeaders: ['authorization'],
   });
   app.use(cookieParser());
   await AppDataSource.initialize();

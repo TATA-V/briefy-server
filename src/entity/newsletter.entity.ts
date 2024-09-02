@@ -17,7 +17,7 @@ export class NewsletterModel extends BaseModel {
 
   @Column()
   @IsString()
-  descriptin: string;
+  description: string;
 
   @Column()
   @IsString()
