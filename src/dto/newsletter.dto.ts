@@ -1,6 +1,6 @@
 import { OmitType, PartialType } from '@nestjs/mapped-types';
 import { NewsletterModel } from 'src/entity/newsletter.entity';
-import { BasePaginate } from './base-paginate.dto';
+import { BasePaginate } from 'src/dto/base-paginate.dto';
 import { IsEnum, IsOptional } from 'class-validator';
 import { Category } from 'src/types/category';
 

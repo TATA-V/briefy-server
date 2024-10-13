@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToMany } from 'typeorm';
 import { BaseModel } from 'src/entity/base.entity';
-import { IsDate, IsEnum, IsString } from 'class-validator';
+import { IsEnum, IsString } from 'class-validator';
 import { Category } from 'src/types/category';
 import { ReadStatus } from 'src/types/article';
 import { UserModel } from './user.entity';
@@ -19,9 +19,13 @@ export class ArticleModel extends BaseModel {
   @IsString()
   description: string;
 
-  @Column({ type: 'timestamptz' })
-  @IsDate()
-  date: Date;
+  @Column()
+  @IsString()
+  content: string;
+
+  @Column()
+  @IsString()
+  pubDate: string;
 
   @Column()
   @IsString()
@@ -29,7 +33,11 @@ export class ArticleModel extends BaseModel {
 
   @Column()
   @IsString()
-  thumnail: string;
+  originallink: string;
+
+  @Column()
+  @IsString()
+  thumbnail: string;
 
   @Column({ type: 'enum', enum: ReadStatus, default: ReadStatus.UNREAD })
   @IsEnum(ReadStatus)
