@@ -48,8 +48,8 @@ export class NewsletterController {
     return this.newsletterService.addFavorite(id, req.user.id);
   }
 
-  @Delete(':id/favorite')
-  deleteFavorite(@Param('id') id: number, @Request() req) {
-    return this.newsletterService.deleteFavorite(id, req.user.id);
+  @Post(':id/favorite')
+  unFavorite(@Param('id') id: number, @Request() req) {
+    return this.newsletterService.unFavorite(id, req.user.id);
   }
 }

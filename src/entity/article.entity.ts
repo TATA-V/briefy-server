@@ -1,7 +1,6 @@
 import { Column, Entity, ManyToMany } from 'typeorm';
 import { BaseModel } from 'src/entity/base.entity';
 import { IsEnum, IsString } from 'class-validator';
-import { Category } from 'src/types/category';
 import { ReadStatus } from 'src/types/article';
 import { UserModel } from './user.entity';
 
@@ -11,17 +10,13 @@ export class ArticleModel extends BaseModel {
   @IsString()
   title: string;
 
-  @Column({ type: 'enum', enum: Category })
-  @IsEnum(Category)
-  category: Category;
+  @Column()
+  @IsString()
+  keyword: string;
 
   @Column()
   @IsString()
   description: string;
-
-  @Column()
-  @IsString()
-  content: string;
 
   @Column()
   @IsString()
@@ -38,6 +33,18 @@ export class ArticleModel extends BaseModel {
   @Column()
   @IsString()
   thumbnail: string;
+
+  @Column()
+  @IsString()
+  content: string;
+
+  @Column()
+  @IsString()
+  company: string;
+
+  @Column()
+  @IsString()
+  reporters: string[];
 
   @Column({ type: 'enum', enum: ReadStatus, default: ReadStatus.UNREAD })
   @IsEnum(ReadStatus)

@@ -2,10 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ArticleModel } from 'src/entity/article.entity';
 import { Repository } from 'typeorm';
-import { getImageFromArticle } from 'src/utils/getImage';
+import { extractArticleInfo } from 'src/utils/extractArticleInfo';
 import { ConfigService } from '@nestjs/config';
 import { GetAll } from 'src/dto/article.dto';
-import { getContentFromArticle } from 'src/utils/getContent';
 
 @Injectable()
 export class ArticleService {
@@ -31,14 +30,10 @@ export class ArticleService {
     const itemsWithImageAndContent = await Promise.all(
       data.items.map(async (item: any) => {
         try {
-          const htmlRes = await fetch(item.link);
-          const html = await htmlRes.text();
-
-          const thumbnail = getImageFromArticle({ html, link: item.link });
-          const content = getContentFromArticle({ html });
-          return { ...item, content, thumbnail };
+          const { thumbnail, content, company, reporters } = await extractArticleInfo({ url: item.link });
+          return { ...item, thumbnail, content, company, reporters };
         } catch (error) {
-          return { ...item, content: null, thumbnail: null };
+          return { ...item, thumbnail: null, content: null, company: null, reporters: [] };
         }
       }),
     );
@@ -49,13 +44,16 @@ export class ArticleService {
     };
   }
   // {
+  //   keyword: string;
   //   title: string;
   //   originallink: string;
   //   link: string;
   //   description: string;
-  //   content: string;
   //   pubDate: string;
   //   thumbnail: string;
+  //   content: string;
+  //   company: string;
+  //   reporters: string[];
   // }
 
   getOne() {}
